@@ -34,4 +34,4 @@ Gemfile.lock
 Gopkg.lock
 
 # Test Output
-test_output/*
+test_output.log

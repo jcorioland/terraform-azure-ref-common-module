@@ -41,11 +41,10 @@ output "resource_group_name" {
 
 ### On your machine
 
-*Note: You need to be authenticated to a valid Azure subscription (using Azure CLI) and have a service principal for the Azure Kubernetes cluster (CLIENT_ID and CLIENT_SECRET)*
+*Note: You need to be authenticated to a valid Azure subscription (using Azure CLI).*
 
 ```bash
 dep ensure
-export TF_VAR_service_principal_client_id="<CLIENT_ID>"
-export TF_VAR_service_principal_client_secret="<CLIENT_SECRET>"
+export TF_VAR_tenant_id="<YOUR_AZURE_TENANT_ID>"
 go test -v ./test/ -timeout 20m
 ```
