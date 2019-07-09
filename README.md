@@ -10,6 +10,7 @@ This modules is responsible for deploying the common stuff required for the refe
 module "tf-ref-common-module" {
   source                           = "../../"
   location                         = "westeurope"
+  tenant_id                        = "${var.tenant_id}"
 }
 ```
 
@@ -26,6 +27,10 @@ You can find an example of usage [here](examples/).
 ```hcl
 variable "location" {
   description = "Azure location to use"
+}
+
+variable "tenant_id" {
+  description = "The Azure tenant id"
 }
 ```
 
