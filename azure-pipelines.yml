@@ -1,0 +1,62 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+  containers:
+  - container: 'common_module_test'
+    image: terraform-azure-reference/common-module-tests:$(tag)
+    endpoint: jcorioland_acr  
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'a0d4d283-d17d-4c9f-9154-c5c3be4f24c5'
+  imageRepository: 'terraform-azure-reference/common-module-tests'
+  containerRegistry: 'jcorioland.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+  
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build Docker and Run Tests
+  jobs:  
+  - job: Build
+    displayName: Build Docker Image
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: build
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+    - script: |
+        mkdir ./test_output
+        docker run \
+          -e ARM_SUBSCRIPTION_ID=$(ARM_SUBSCRIPTION_ID) \
+          -e ARM_CLIENT_ID=$(ARM_CLIENT_ID) \
+          -e ARM_CLIENT_SECRET=$(ARM_CLIENT_SECRET) \
+          -e ARM_TENANT_ID=$(ARM_TENANT_ID) \
+          -v $(System.DefaultWorkingDirectory)/test_output:/go/src/common-module/test_output \
+          $(containerRegistry)/$(imageRepository):$(tag)
+        ls -all ./test_output
+      displayName: Run tests in container
+      env:
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+        ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        ARM_TENANT_ID: $(ARM_TENANT_ID)
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit, cTest
+        testResultsFiles: '**/report.xml'
