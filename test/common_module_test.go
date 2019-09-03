@@ -62,6 +62,7 @@ func testKeyVault(authorizer autorest.Authorizer, resourceGroupName string, vaul
 func testAzureContainerRegistry(authorizer autorest.Authorizer, resourceGroupName string, acrName string) error {
 	AzureSubscriptionID := os.Getenv("AZURE_SUBSCRIPTION_ID")
 	acrClient := containerregistry.NewRegistriesClient(AzureSubscriptionID)
+	acrClient.Authorizer = authorizer
 
 	_, err := acrClient.Get(context.Background(), resourceGroupName, acrName)
 	if err != nil {
