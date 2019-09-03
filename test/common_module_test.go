@@ -3,6 +3,7 @@ package test
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"testing"
 
@@ -34,6 +35,7 @@ func TestCommonModule(t *testing.T) {
 
 func testKeyVault(resourceGroupName string, vaultName string) error {
 	AzureSubscriptionID := os.Getenv("AZURE_SUBSCRIPTION_ID")
+	log.Printf("############ SUBSCRIPTION ID = %s", AzureSubscriptionID)
 
 	kvClient := keyvault.NewVaultsClient(AzureSubscriptionID)
 	authorizer, err := auth.NewAuthorizerFromEnvironment()
