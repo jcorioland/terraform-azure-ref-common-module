@@ -47,6 +47,10 @@ stages:
           -e ARM_CLIENT_ID=$(ARM_CLIENT_ID) \
           -e ARM_CLIENT_SECRET=$(ARM_CLIENT_SECRET) \
           -e ARM_TENANT_ID=$(ARM_TENANT_ID) \
+          -e AZURE_TENANT_ID=$(AZURE_TENANT_ID) \
+          -e AZURE_CLIENT_ID=$(AZURE_CLIENT_ID) \
+          -e AZURE_CLIENT_SECRET=$(AZURE_CLIENT_SECRET) \
+          -e AZURE_SUBSCRIPTION_ID=$(AZURE_SUBSCRIPTION_ID) \
           -v $(System.DefaultWorkingDirectory)/test_output:/go/src/common-module/test_output \
           $(containerRegistry)/$(imageRepository):$(tag)
         ls -all ./test_output
@@ -56,6 +60,10 @@ stages:
         ARM_CLIENT_ID: $(ARM_CLIENT_ID)
         ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
         ARM_TENANT_ID: $(ARM_TENANT_ID)
+        AZURE_TENANT_ID: $(ARM_TENANT_ID)
+        AZURE_CLIENT_ID: $(ARM_CLIENT_ID)
+        AZURE_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+        AZURE_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit, cTest
