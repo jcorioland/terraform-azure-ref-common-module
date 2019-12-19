@@ -9,8 +9,8 @@ This modules is responsible for deploying the common stuff required for the refe
 ```hcl
 module "tf-ref-common-module" {
   source                           = "../../"
-  location                         = "westeurope"
-  tenant_id                        = "${var.tenant_id}"
+  location                         = "francecentral"
+  tenant_id                        = var.tenant_id
 }
 ```
 
@@ -38,7 +38,7 @@ variable "tenant_id" {
 
 ```hcl
 output "resource_group_name" {
-  value = "${azurerm_resource_group.rg.name}"
+  value = azurerm_resource_group.rg.name
 }
 ```
 
@@ -49,7 +49,7 @@ output "resource_group_name" {
 *Note: You need to be authenticated to a valid Azure subscription (using Azure CLI).*
 
 ```bash
-dep ensure
+dep ensure -v
 export TF_VAR_tenant_id="<YOUR_AZURE_TENANT_ID>"
 go test -v ./test/ -timeout 20m
 ```

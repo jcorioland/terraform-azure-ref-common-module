@@ -35,3 +35,4 @@ Gopkg.lock
 
 # Test Output
 test_output.log
+test_output/

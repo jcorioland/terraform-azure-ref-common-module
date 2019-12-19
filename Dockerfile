@@ -1,4 +1,4 @@
-FROM jcorioland/azure-terratest:0.12.3
+FROM jcorioland/azure-terratest:0.12.8
 
 # Define environment variables
 ARG BUILD_MODULE_NAME="common-module"
